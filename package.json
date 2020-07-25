@@ -1,0 +1,27 @@
+{
+    "name": "back",
+    "version": "1.0.0",
+    "description": "",
+    "main": "server.js",
+    "scripts": {
+        "test": "export NODE_ENV=production && nodemon server.jss",
+        "start": "export NODE_ENV=final && nodemon server.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "cheerio": "^1.0.0-rc.3",
+        "cors": "^2.8.5",
+        "express": "^4.17.1",
+        "joi": "^17.1.1",
+        "jsonwebtoken": "^8.5.1",
+        "mongoose": "^5.9.25",
+        "morgan": "^1.10.0",
+        "persian-date": "^1.1.0",
+        "request": "^2.88.2",
+        "request-promise": "^4.2.6",
+        "rotating-file-stream": "^2.1.3"
+    }
+}

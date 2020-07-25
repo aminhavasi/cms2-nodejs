@@ -1,0 +1,13 @@
+{
+    "production": {
+        "level": "production",
+        "port": 5000,
+        "uri": "mongodb://localhost:27017/cms2",
+        "jwt_key": "aminhavasi"
+    },
+    "final": {
+        "level": "final",
+        "port": 8000,
+        "uri": "mongodb://localhost:27017/cms2-final"
+    }
+}
