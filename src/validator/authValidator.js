@@ -10,6 +10,16 @@ const registerValidator = (user) => {
     return shcema.validate(user);
 };
 
+const loginValidator = (user) => {
+    const shcema = Joi.object({
+        email: Joi.string().email().min(3).max(255).required(),
+        password: Joi.string().min(8).max(1024).required(),
+    });
+
+    return shcema.validate(user);
+};
+
 module.exports = {
     registerValidator,
+    loginValidator,
 };

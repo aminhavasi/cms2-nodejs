@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema(
         ],
     },
 
-    { timestamps: true, toJSON: { virtuals: true } }
+    { toJSON: { virtuals: true } }
 );
 
 userSchema.methods.genAuthToken = function () {

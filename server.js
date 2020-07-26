@@ -12,7 +12,7 @@ db();
 app.use(express.json());
 
 const corsOptions = {
-    exposedHeaders: 'x-auth ',
+    exposedHeaders: 'x-auth',
 };
 app.use(cors(corsOptions));
 let accessLogStream = rfs.createStream('access.log', {
