@@ -2,12 +2,14 @@ const express = require('express');
 const User = require('../models/user');
 const router = express.Router();
 const persianDate = require('persian-date');
-
+const genAuthTokenRecovery = require('./../helper/recoveryToken');
+const sendEmail = require('../helper/emails/recoveryEmail');
 const {
     registerValidator,
     loginValidator,
+    recoveryValidator,
 } = require('./../validator/authValidator');
-const { findOne } = require('../models/user');
+const Recovery = require('../models/tokens');
 
 persianDate.toLocale('en');
 const date = new persianDate().format('YYYY/M/DD');
@@ -65,6 +67,26 @@ router.post('/logout', async (req, res) => {
         );
     } catch (err) {
         res.status(400).send('failed');
+    }
+});
+
+router.post('/recovery', async (req, res) => {
+    try {
+        const { error } = await recoveryValidator(req.body);
+        if (error) return res.status(400).send('Invalid email');
+        const user = await User.findOne({ email: req.body.email });
+        if (!user) return res.status(404).send('Invalid email');
+        const token = await genAuthTokenRecovery(user);
+        const rtToken = await new Recovery({
+            user: user._id,
+            token,
+        });
+        await rtToken.save();
+        await sendEmail(user, token);
+
+        res.status(200).send('ok');
+    } catch (err) {
+        res.status(400).send('kkk');
     }
 });
 

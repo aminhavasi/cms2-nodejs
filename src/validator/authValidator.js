@@ -19,7 +19,16 @@ const loginValidator = (user) => {
     return shcema.validate(user);
 };
 
+const recoveryValidator = (email) => {
+    const shcema = Joi.object({
+        email: Joi.string().email().min(3).max(255).required(),
+    });
+
+    return shcema.validate(email);
+};
+
 module.exports = {
     registerValidator,
     loginValidator,
+    recoveryValidator,
 };
