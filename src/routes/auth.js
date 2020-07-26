@@ -8,6 +8,7 @@ const {
     registerValidator,
     loginValidator,
     recoveryValidator,
+    RecoveryPasswordValidator,
 } = require('./../validator/authValidator');
 const Recovery = require('../models/tokens');
 
@@ -87,6 +88,31 @@ router.post('/recovery', async (req, res) => {
         res.status(200).send('ok');
     } catch (err) {
         res.status(400).send('kkk');
+    }
+});
+
+router.post('/reset', async (req, res) => {
+    try {
+        const { error } = await RecoveryPasswordValidator(req.body);
+        if (error) return res.status(400).send(error.details[0].message);
+        let token = await Recovery.findOne({
+            token: req.query.token,
+        });
+        if (!token) {
+            return res.status(400).send('Invalid token or emailLink');
+        }
+        await User.findOneAndUpdate(
+            { _id: token.user },
+            { $set: { password: req.body.password } },
+            (err, doc) => {
+                if (err) return res.status(400).send('something went wrong');
+            }
+        );
+        await Recovery.updateOne({ _id: token._id }, { $unset: { token: 1 } });
+        token.save();
+        res.status(200).send('success change password');
+    } catch (err) {
+        res.status(400).send('error on request');
     }
 });
 

@@ -27,8 +27,16 @@ const recoveryValidator = (email) => {
     return shcema.validate(email);
 };
 
+const RecoveryPasswordValidator = (password) => {
+    const schema = Joi.object({
+        password: Joi.string().min(8).max(1024),
+    });
+    return schema.validate(password);
+};
+
 module.exports = {
     registerValidator,
     loginValidator,
     recoveryValidator,
+    RecoveryPasswordValidator,
 };
