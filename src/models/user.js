@@ -33,6 +33,10 @@ const userSchema = new mongoose.Schema(
                 },
             },
         ],
+        admin: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Admin',
+        },
     },
 
     { toJSON: { virtuals: true } }
@@ -58,6 +62,12 @@ userSchema.methods.genAuthToken = function () {
 
 userSchema.virtual('user', {
     ref: 'Recovery',
+    localField: '_id',
+    foreignField: 'user',
+});
+
+userSchema.virtual('user', {
+    ref: 'Admin',
     localField: '_id',
     foreignField: 'user',
 });

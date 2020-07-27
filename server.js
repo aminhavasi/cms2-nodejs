@@ -21,6 +21,7 @@ let accessLogStream = rfs.createStream('access.log', {
 });
 app.use(morgan('combined', { stream: accessLogStream }));
 app.use('/api/auth', require('./src/routes/auth'));
+app.use('/api/admin', require('./src/routes/admin'));
 
 httpServer.listen(access.port, () => {
     if (access.level === 'production') {

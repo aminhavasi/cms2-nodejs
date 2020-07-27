@@ -1,0 +1,8 @@
+{
+    "boss": {
+        "access": ["/", "/l"]
+    },
+    "user": {
+        "access": ["/pp", "/admin"]
+    }
+}
