@@ -6,6 +6,7 @@ const isAdmin = async (req, res, next) => {
     const user = await User.findOne({ _id: req.user._id })
         .populate('admin')
         .exec();
+
     const admin = await Admin.findOne({ user: user._id });
     if (admin.position === 'boss') {
         accessRoute = acl.boss.access.find((element) => {
@@ -21,7 +22,11 @@ const isAdmin = async (req, res, next) => {
             .send('Access denied.You cant access to Admin Routes');
     }
     if (accessRoute) next();
-    next();
+    else {
+        return res
+            .status(401)
+            .send('Access denied.You cant access to Admin Routes');
+    }
 };
 
 module.exports = isAdmin;

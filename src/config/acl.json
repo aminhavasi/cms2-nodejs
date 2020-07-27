@@ -1,6 +1,6 @@
 {
     "boss": {
-        "access": ["/", "/l"]
+        "access": ["/createadmin", "/l"]
     },
     "user": {
         "access": ["/pp", "/admin"]

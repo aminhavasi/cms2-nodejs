@@ -15,10 +15,13 @@ const corsOptions = {
     exposedHeaders: 'x-auth',
 };
 app.use(cors(corsOptions));
-let accessLogStream = rfs.createStream('access.log', {
-    interval: '1d',
-    path: path.resolve(__dirname + '/src/log'),
+var accessLogStream = rfs.createStream('access.log', {
+    interval: '24h',
+    path: path.join(__dirname, 'src/log'),
+    compress: true,
 });
+
+// setup the logger
 app.use(morgan('combined', { stream: accessLogStream }));
 app.use('/api/auth', require('./src/routes/auth'));
 app.use('/api/admin', require('./src/routes/admin'));
