@@ -16,7 +16,7 @@ persianDate.toLocale('en');
 const date = new persianDate().format('YYYY/M/DD');
 router.post('/register', async (req, res) => {
     try {
-        const { error } = await registerValidator(req.user);
+        const { error } = await registerValidator(req.body);
         if (error) return res.status(400).send('data sent is not currect');
         const user = await User.findOne({ email: req.body.email });
         if (user) return res.status(400).send('this email Already exict!');
@@ -24,7 +24,7 @@ router.post('/register', async (req, res) => {
         const newUser = await new User(req.body);
         await newUser.save();
         const token = await newUser.genAuthToken();
-        res.status(200).header('x-auth', token).send();
+        res.status(201).header('x-auth', token).send();
     } catch (err) {
         res.status(400).send('something went wrong');
     }
