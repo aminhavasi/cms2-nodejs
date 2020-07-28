@@ -34,12 +34,16 @@ router.post('/login', async (req, res) => {
     try {
         const { error } = await loginValidator(req.body);
         if (error) return res.status(400).send('data sent is not correct');
-        const user = await User.findOne({ email: req.body.email });
-        if (!user)
-            return res.status(404).send('Your email or password is incorrect');
+        const user = await User.findByCredintials(
+            req.body.email,
+            req.body.password
+        );
+
         const token = await user.genAuthToken();
         res.status(200).header('x-auth', token).send();
     } catch (err) {
+        if (err === 'not')
+            return res.status(404).send('Your email or password is incorrect');
         res.status(400).send('something went wrong');
     }
 });
@@ -87,7 +91,7 @@ router.post('/recovery', async (req, res) => {
 
         res.status(200).send('ok');
     } catch (err) {
-        res.status(400).send('kkk');
+        res.status(400).send('something went wrong');
     }
 });
 

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const config = require('./../config/access');
+const bcrypt = require('bcryptjs');
 const userSchema = new mongoose.Schema(
     {
         username: {
@@ -42,6 +43,20 @@ const userSchema = new mongoose.Schema(
     { toJSON: { virtuals: true } }
 );
 
+userSchema.pre('save', function (next) {
+    let user = this;
+    if (user.isModified('password')) {
+        bcrypt.genSalt(10, (err, salt) => {
+            bcrypt.hash(user.password, salt, (err, hash) => {
+                user.password = hash;
+                next();
+            });
+        });
+    } else {
+        next();
+    }
+});
+
 userSchema.methods.genAuthToken = function () {
     let user = this;
     let access = 'user';
@@ -57,6 +72,22 @@ userSchema.methods.genAuthToken = function () {
     user.tokens.push({ token, access });
     return user.save().then(() => {
         return token;
+    });
+};
+
+userSchema.statics.findByCredintials = function (email, password) {
+    let User = this;
+    return User.findOne({ email }).then((user) => {
+        if (!user) return Promise.reject('not');
+        return new Promise((resolve, reject) => {
+            bcrypt.compare(password, user.password, (err, res) => {
+                if (res) {
+                    resolve(user);
+                } else {
+                    reject('not');
+                }
+            });
+        });
     });
 };
 
