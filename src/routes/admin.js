@@ -33,7 +33,7 @@ router.post('/createadmin', authenticate, adminLevel, async (req, res) => {
     }
 });
 
-router.delete('/removeAdmin', authenticate, adminLevel, async (req, res) => {
+router.delete('/removeadmin', authenticate, adminLevel, async (req, res) => {
     const { error } = await removeAdmin(req.body);
     if (error) return res.status(400).send(error.details[0].message);
     try {
